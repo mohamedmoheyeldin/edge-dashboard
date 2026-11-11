@@ -5,6 +5,8 @@ name: Release
 on:
   push:
     tags: ['v*']
+  # "Run workflow" button: builds the installer as a test without publishing a release.
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -13,9 +15,9 @@ jobs:
   release:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 11.0.x
 
@@ -26,9 +28,10 @@ jobs:
 
       - name: Build the installer
         shell: pwsh
-        run: .\installer\build.ps1 -Version ("${{ github.ref_name }}" -replace '^v', '')
+        run: .\installer\build.ps1 -Version ("${{ github.ref_type == 'tag' && github.ref_name || 'v0.0.0' }}" -replace '^v', '')
 
       - name: Publish the release
+        if: github.ref_type == 'tag'
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
