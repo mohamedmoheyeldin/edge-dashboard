@@ -78,6 +78,8 @@ public sealed partial class MainWindow : Window
         _micStrip = new AudioStrip(_mic, "Microphone", "\uE720");
         Build();
         PlaceOnEdgeDisplay();
+        // A dashboard, not a program you switch to: keep it off the taskbar and out of Alt+Tab.
+        AppWindow.IsShownInSwitchers = false;
 
         var escape = new KeyboardAccelerator { Key = VirtualKey.Escape };
         escape.Invoked += (_, _) => Close();
