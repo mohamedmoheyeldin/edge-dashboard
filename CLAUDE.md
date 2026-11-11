@@ -5,8 +5,10 @@ Native Windows (WinUI 3, .NET 11, unpackaged) hardware dashboard for the Corsair
 `Ui/`. `README.md` describes what it shows and how it is installed.
 
 ## Rules
-- **Do not install or run a new build on this PC.** Eldin installs releases himself. Build to
-  check that it compiles; stop there unless he asks for more.
+- **Installing is automatic too** (Eldin, 2026-11-11: "this rules apply to everything"). After a
+  release is published, download its `EdgeDashboard-Setup-<version>.exe` from the GitHub release
+  and install it on this PC (it installs per user, no admin prompt), then check that the
+  dashboard is running again on the Edge display.
 - **Releases are fully automatic** (Eldin, 2026-11-11). When a change that people will notice is
   finished and builds in Release, release it without asking: raise `<Version>` in
   `EdgeDashboard.csproj` (patch for fixes, minor for features), commit, push, then push the tag
@@ -36,8 +38,8 @@ Native Windows (WinUI 3, .NET 11, unpackaged) hardware dashboard for the Corsair
 dotnet build -c Release          # the app
 .\installer\build.ps1            # the installer, into dist\ (Inno Setup 6 is installed)
 ```
-There are no automated tests. After a change, build in Release and say plainly that it was
-compiled but not run, unless Eldin ran it.
+There are no automated tests. After a change, build in Release; what was only compiled and not
+seen running should be reported as such.
 
 ## Needs at run time
 HWiNFO64 with Shared Memory Support on, the NVIDIA app (FrameView SDK), Windows location on.
