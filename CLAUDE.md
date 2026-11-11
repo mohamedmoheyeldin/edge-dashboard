@@ -22,6 +22,11 @@ Native Windows (WinUI 3, .NET 11, unpackaged) hardware dashboard for the Corsair
 - Sensor names in `Sensors/HwInfoReader.cs` match this PC's hardware in HWiNFO. Do not rename or
   generalise them without checking the live sensor list.
 
+- **While developing**, run the Release build straight from `bin\` to try a change; close the
+  installed dashboard first and start it again afterwards. Only the published release gets
+  installed. Afterwards leave nothing behind: no test copies running, no downloaded installers,
+  no scratch files, `git status` clean.
+
 ## Layout
 | Path | What |
 |---|---|
