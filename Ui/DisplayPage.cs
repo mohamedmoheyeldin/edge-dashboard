@@ -19,9 +19,12 @@ public sealed class DisplayPage
     private readonly Dictionary<(DdcMonitor Monitor, byte Code), (Slider Slider, TextBlock Value)> _controls = new();
     private bool _refreshing; // true while sliders are being set from the monitor, so they don't send the value back
 
-    public DisplayPage(Grid host)
+    private readonly Action _close;
+
+    public DisplayPage(Grid host, Action close)
     {
         _host = host;
+        _close = close;
         _ui = DispatcherQueue.GetForCurrentThread();
         _host.Padding = new Thickness(8);
         _host.Children.Add(Centered("Reading monitor settings…"));
@@ -65,7 +68,8 @@ public sealed class DisplayPage
         _host.Children.Clear();
         var rows = Make.Rows(14, Make.Auto, Make.Star);
 
-        var header = Make.Columns(16, Make.Auto, Make.Auto, Make.Star, Make.Auto);
+        var header = Make.Columns(16, Make.Auto, Make.Auto, Make.Star, Make.Auto, Make.Auto);
+        CloseButton().At(header, column: 4);
         var icon = Make.Icon("", 28, Theme.Accent);
         icon.VerticalAlignment = VerticalAlignment.Center;
         icon.At(header, column: 0);
@@ -94,6 +98,32 @@ public sealed class DisplayPage
         }
         cards.At(rows, row: 1);
         _host.Children.Add(Make.Panel(rows, new Thickness(20, 14, 20, 16)));
+    }
+
+    /// <summary>
+    /// The only way to close the dashboard, and it takes two taps: the first arms the button for a
+    /// few seconds ("Tap again to close"), the second closes. A stray touch does nothing.
+    /// </summary>
+    private Button CloseButton()
+    {
+        var label = Make.Text("Close dashboard", 20);
+        var content = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 10 };
+        content.Children.Add(Make.Icon("", 20, Theme.Text));
+        content.Children.Add(label);
+        var button = new Button { Height = 48, Padding = new Thickness(16, 0, 16, 0), CornerRadius = new CornerRadius(8), Content = content };
+
+        bool armed = false;
+        var disarm = new DispatcherTimer { Interval = TimeSpan.FromSeconds(4) };
+        disarm.Tick += (_, _) => { disarm.Stop(); armed = false; label.Text = "Close dashboard"; button.ClearValue(Control.BackgroundProperty); };
+        button.Click += (_, _) =>
+        {
+            if (armed) { disarm.Stop(); _close(); return; }
+            armed = true;
+            label.Text = "Tap again to close";
+            button.Background = Theme.Brush(Theme.Danger);
+            disarm.Start();
+        };
+        return button;
     }
 
     private Border MonitorCard(string name, DdcMonitor monitor, List<Setting> settings)

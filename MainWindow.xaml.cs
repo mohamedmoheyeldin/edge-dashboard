@@ -81,13 +81,11 @@ public sealed partial class MainWindow : Window
         // A dashboard, not a program you switch to: keep it off the taskbar and out of Alt+Tab.
         AppWindow.IsShownInSwitchers = false;
 
-        var escape = new KeyboardAccelerator { Key = VirtualKey.Escape };
-        escape.Invoked += (_, _) => Close();
-        Pages.KeyboardAccelerators.Add(escape);
 
         Backdrop.Background = Theme.Brush(Theme.Page);
 
-        var displayPage = new DisplayPage(DisplayHost);
+        // No keyboard shortcut closes the dashboard; the only way is the two-tap button on the settings page.
+        var displayPage = new DisplayPage(DisplayHost, Close);
         // "--display" opens straight on the screen-settings page (used for testing).
         if (Environment.GetCommandLineArgs().Contains("--display")) Pages.Loaded += (_, _) => Pages.SelectedIndex = 1;
 

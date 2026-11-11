@@ -22,7 +22,8 @@ Run `EdgeDashboard-Setup-<version>.exe`. It installs for the current user withou
 Start menu entry, starts with Windows, and sets the app to use the power-saving GPU. Uninstall from
 Settings > Apps.
 
-The dashboard opens full-screen on the 2560×720 display. Press Esc to close it.
+The dashboard opens full-screen on the 2560×720 display. To close it, swipe to the Screen settings
+page and tap **Close dashboard** twice (the second tap confirms). No key closes it by accident.
 
 ## Build
 
