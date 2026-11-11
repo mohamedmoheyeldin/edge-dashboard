@@ -25,6 +25,22 @@ Swipe left on the dashboard to reach it; swipe right to go back.
 - **Close dashboard** shuts the dashboard down. It needs two taps: the first turns the button red
   ("Tap again to close") for a few seconds, the second closes.
 
+## Built on this system
+
+The dashboard was made for, and tested on, this PC. The sensor names it reads from HWiNFO match
+this hardware, so other parts may show some values as "–".
+
+| Part | Model |
+|---|---|
+| Processor | AMD Ryzen 9 9950X3D (16 cores: 0–7 3D Cache, 8–15 Frequency) |
+| Graphics card | NVIDIA GeForce RTX 5080 Founders Edition (16 GB) |
+| Integrated graphics | AMD Radeon (drives the Xeneon Edge and runs the dashboard) |
+| Motherboard | ASUS ROG Strix X870-I Gaming WiFi |
+| Memory | 32 GB (2 × 16 GB) G.Skill DDR5-6000 CL30 |
+| Storage | 2 × WD Black SN850X 4 TB NVMe (C: and D:) |
+| Monitors | 2 × Alienware AW3423DW (3440×1440) and the Corsair Xeneon Edge (2560×720 touch) |
+| Windows | Windows 11 Pro |
+
 ## Needs
 
 - [HWiNFO64](https://www.hwinfo.com/) running with **Shared Memory Support** turned on (all sensor values come from it)
