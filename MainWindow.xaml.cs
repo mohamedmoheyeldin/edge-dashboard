@@ -43,6 +43,7 @@ public sealed partial class MainWindow : Window
     private readonly GraphCard _gpuClock = new("Clock speed", Theme.Nvidia, Theme.Hex("#3F6600"), fixedScale: false, v => $"{v:N0} MHz");
     private readonly TextBlock _vramPercent = Make.Text("", 24, bold: true), _vramUsed = Make.Text("–", 44, bold: true, font: Theme.Display), _vramTotal = Make.Text("", 24, Theme.TextMuted);
     private readonly TextBlock _vramDedicated = Make.Text("–", 18, bold: true), _vramShared = Make.Text("–", 18, bold: true), _vramFree = Make.Text("–", 18, bold: true);
+    private readonly TextBlock _vramClock = Make.Text("–", 26, bold: true, font: Theme.Display);
     private readonly Bar _vramBar = new(14);
     private readonly TextBlock _fanState = Make.Text("", 20, Theme.TextMuted);
     private readonly TextBlock[] _fanRpm = [Make.Text("–", 28, bold: true), Make.Text("–", 28, bold: true)];
@@ -298,7 +299,21 @@ public sealed partial class MainWindow : Window
         _vramTotal.VerticalAlignment = VerticalAlignment.Bottom;
         _vramTotal.Margin = new Thickness(8, 0, 0, 6);
         big.Children.Add(_vramUsed); big.Children.Add(_vramTotal);
-        big.At(rows, row: 1);
+
+        // Memory speed (the memory clock) sits to the right of the big number.
+        var speedValue = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 6, HorizontalAlignment = HorizontalAlignment.Right };
+        var mhz = Make.Text("MHz", 18, Theme.TextMuted);
+        mhz.VerticalAlignment = VerticalAlignment.Bottom; mhz.Margin = new Thickness(0, 0, 0, 3);
+        speedValue.Children.Add(_vramClock); speedValue.Children.Add(mhz);
+        var speedLabel = Make.Text("Speed", 18, Theme.TextMuted);
+        speedLabel.HorizontalAlignment = HorizontalAlignment.Right;
+        var speed = new StackPanel { VerticalAlignment = VerticalAlignment.Bottom, Margin = new Thickness(0, 0, 0, 4) };
+        speed.Children.Add(speedLabel); speed.Children.Add(speedValue);
+
+        var bigRow = Make.Columns(12, Make.Star, Make.Auto);
+        big.At(bigRow, column: 0);
+        speed.At(bigRow, column: 1);
+        bigRow.At(rows, row: 1);
 
         _vramBar.At(rows, row: 3);
 
@@ -638,6 +653,7 @@ public sealed partial class MainWindow : Window
             _vramBar.SetRule(pct / 100);
             _vramFree.Text = $"{f / 1024:0.0} GB";
         }
+        if (s.Get(gpu, "GPU Memory Clock") is double memClock) Glide(_vramClock, memClock, x => x.ToString("N0", Us));
         if (s.Get(gpu, "GPU D3D Memory Dedicated") is double d) _vramDedicated.Text = $"{d / 1024:0.0} GB";
         if (s.Get(gpu, "GPU D3D Memory Dynamic") is double dyn) _vramShared.Text = $"{dyn / 1024:0.0} GB";
 
