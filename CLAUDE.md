@@ -7,8 +7,12 @@ Native Windows (WinUI 3, .NET 11, unpackaged) hardware dashboard for the Corsair
 ## Rules
 - **Do not install or run a new build on this PC.** Eldin installs releases himself. Build to
   check that it compiles; stop there unless he asks for more.
-- **Do not push a version tag** (`v*`) unless Eldin asks: a tag makes GitHub build the installer
-  and publish a release. Ordinary pushes to `main` do not trigger anything.
+- **Releases are fully automatic** (Eldin, 2026-11-11). When a change that people will notice is
+  finished and builds in Release, release it without asking: raise `<Version>` in
+  `EdgeDashboard.csproj` (patch for fixes, minor for features), commit, push, then push the tag
+  `v<version>` (`git tag -a v1.0.1 -m "Edge Dashboard 1.0.1"`, `git push origin v1.0.1`). The tag
+  makes GitHub build the installer and publish the release; check with `gh run watch` that the
+  run succeeded and fix it if it did not. Ordinary pushes to `main` do not trigger anything.
 - The dashboard is touch-only and full-screen. Nothing may close it by accident: closing takes two
   taps on **Close dashboard**. Do not add key or gesture shortcuts that close or move it.
 - Monitor sliders write to the monitor itself over DDC/CI, so a test changes the real picture
