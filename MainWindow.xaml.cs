@@ -517,11 +517,41 @@ public sealed partial class MainWindow : Window
         catch (Exception) { /* stay as a normal window if the display can't be resolved */ }
     }
 
+    private DateTime _lastReplace = DateTime.MinValue;
+
+    /// <summary>
+    /// When the Edge disconnects and comes back (firmware update, cable, sleep), Windows moves the
+    /// window to another monitor. Checked once a second: if the Edge is present and the window isn't
+    /// covering it, put it back.
+    /// </summary>
+    private void KeepOnEdgeDisplay()
+    {
+        try
+        {
+            var areas = DisplayArea.FindAll();
+            for (int i = 0; i < areas.Count; i++)
+            {
+                var b = areas[i].OuterBounds;
+                if (b.Width != 2560 || b.Height != 720) continue;
+                var p = AppWindow.Position; var s = AppWindow.Size;
+                if (p.X == b.X && p.Y == b.Y && s.Width == b.Width && s.Height == b.Height) return;
+                if ((DateTime.Now - _lastReplace).TotalSeconds < 5) return; // let Windows settle between tries
+                _lastReplace = DateTime.Now;
+                AppWindow.SetPresenter(AppWindowPresenterKind.Overlapped);
+                AppWindow.Move(new PointInt32(b.X, b.Y));
+                AppWindow.SetPresenter(AppWindowPresenterKind.FullScreen);
+                return;
+            }
+        }
+        catch (Exception) { /* try again on the next tick */ }
+    }
+
     // ---------------------------------------------------------------- data
 
     /// <summary>Once a second: the clock, and the audio state (so changes made elsewhere show up here).</summary>
     private void SlowTick()
     {
+        KeepOnEdgeDisplay();
         var now = DateTime.Now;
         _time.Text = now.ToString("h:mm", Us);
         _ampm.Text = now.ToString("tt", Us);
