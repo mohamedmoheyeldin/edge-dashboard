@@ -30,3 +30,12 @@ The dashboard opens full-screen on the 2560×720 display. Press Esc to close it.
 dotnet build -c Release          # the app
 .\installer\build.ps1            # the installer, into dist\ (needs Inno Setup 6)
 ```
+
+## Release
+
+Push a version tag and GitHub builds the installer and publishes it on the Releases page:
+
+```powershell
+git tag -a v1.0.1 -m "Edge Dashboard 1.0.1"
+git push origin v1.0.1
+```

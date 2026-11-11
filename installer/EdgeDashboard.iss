@@ -4,7 +4,10 @@
 ; run it on the power-saving GPU (the AMD integrated graphics that drive the Xeneon Edge).
 
 #define AppName "Edge Dashboard"
-#define AppVersion "1.0.0"
+; The version comes from build.ps1 (/DAppVersion=...); 1.0.0 is only the fallback.
+#ifndef AppVersion
+  #define AppVersion "1.0.0"
+#endif
 #define AppExe "EdgeDashboard.exe"
 
 [Setup]
