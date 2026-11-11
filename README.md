@@ -10,6 +10,21 @@ A native Windows (WinUI 3) hardware dashboard for the Corsair Xeneon Edge (2560Ã
 - Output and microphone volume, mute and device switching by touch
 - A second page (swipe) with brightness, contrast and colour controls for each monitor
 
+## Screen settings page
+
+Swipe left on the dashboard to reach it; swipe right to go back.
+
+![Screen settings page](docs/screen-settings.png)
+
+- One card per monitor, with its resolution and refresh rate. Sliders change the monitor's own
+  settings directly (over DDC/CI, the same channel the buttons on the monitor use), so they apply
+  to everything on that screen, not just the dashboard.
+- **Xeneon Edge:** brightness, contrast, sharpness, and the red, green and blue levels.
+  **Reset to factory** restores the Edge's original picture settings.
+- **Other monitors:** brightness and contrast.
+- **Close dashboard** shuts the dashboard down. It needs two taps: the first turns the button red
+  ("Tap again to close") for a few seconds, the second closes.
+
 ## Needs
 
 - [HWiNFO64](https://www.hwinfo.com/) running with **Shared Memory Support** turned on (all sensor values come from it)
